@@ -22,3 +22,8 @@ dependencies {
   
 De plus j'ai décommenté ```implementation project(':adapter-jpa')``` du ```build.gradle``` de app.  
 Ainsi que ```include 'adapter-jpa'``` du ```settings.gradle``` du projet.  
+Pas de difficulté pour cette première partie.  
+
+### Pas d'inspi pour le nom
+Ensuite dans le dossier java je créer le package ```com.example.jpa``` avec la classe Java ```DAOUserJpa```.  
+Pour pouvoir reproduire la structure de com.example.mongo j'ai recréé UserJpa et UserJpaRepository mais grosse difficulté à le faire fonctionner et à comprendre le but de JPA ? = MySQL ?
