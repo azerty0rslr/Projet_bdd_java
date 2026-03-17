@@ -199,7 +199,7 @@ spring:
 
 #### Création de la base MongoDB
 On commence par la création de la DB sur MongoDB :  
-<img width="808" height="650" alt="image" src="https://github.com/user-attachments/assets/e6f2b45e-9a1a-4131-8e0b-9a5078ccc422" />
+<img width="808" height="650" alt="image" src="https://github.com/user-attachments/assets/e6f2b45e-9a1a-4131-8e0b-9a5078ccc442" />  
 
 > **Note :** Il n'est pas nécessaire de créer la collection manuellement — 
 > Spring Data MongoDB la crée automatiquement au premier appel.
