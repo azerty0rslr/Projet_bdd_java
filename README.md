@@ -24,6 +24,10 @@ De plus j'ai décommenté ```implementation project(':adapter-jpa')``` du ```bui
 Ainsi que ```include 'adapter-jpa'``` du ```settings.gradle``` du projet.  
 Pas de difficulté pour cette première partie.  
 
-### Pas d'inspi pour le nom
-Ensuite dans le dossier java je créer le package ```com.example.jpa``` avec la classe Java ```DAOUserJpa```.  
-Pour pouvoir reproduire la structure de com.example.mongo j'ai recréé UserJpa et UserJpaRepository mais grosse difficulté à le faire fonctionner et à comprendre le but de JPA ? = MySQL ?
+### Ajout du contenu de adapter-jpa
+Ensuite dans le dossier java je créer le package ```com.example.jpa``` avec la classe Java ```DAOUserJpa```, l'interface ```UserJpaRepository``` et la classe ```UserJpa```.  
+J'ai repris la même structure que pour le Mongo mais j'avais beaucoup d'erreurs que je ne comprennais pas, en relancant le lendemain, plus aucune erreur ne s'affichait.
+
+## Suite du projet le 17/03
+### Les articles
+Etant donné que l'énoncé nous parle d'articles, je créer dans ```core-domain``` la même structure que pour User mais cette fois ci pour les articles ```Article.java```, ```ArticleService.java``` et ```IDAOService.java```.  
