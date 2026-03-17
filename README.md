@@ -30,4 +30,4 @@ J'ai repris la même structure que pour le Mongo mais j'avais beaucoup d'erreurs
 
 ## Suite du projet le 17/03
 ### Les articles
-Etant donné que l'énoncé nous parle d'articles, je créer dans ```core-domain``` la même structure que pour User mais cette fois ci pour les articles ```Article.java```, ```ArticleService.java``` et ```IDAOService.java```.  
+Etant donné que l'énoncé nous parle d'articles, je créer dans ```core-domain``` la même structure que pour User mais cette fois ci pour les articles ```Article.java```, ```ArticleService.java``` et ```IDAOArticle.java```.  
