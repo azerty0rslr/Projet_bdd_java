@@ -1,5 +1,5 @@
 # Projet BDD x JAVA
-## Partie autonomie du 16/03
+## Partie autonomie du 16/03 - JPA
 ### Création de adapter-jpa
 Sur le même principe que les autres sous-projets je reprends la même structure :  
 adpater-jpa -> src -> main -> java  
@@ -24,7 +24,8 @@ Pas de difficulté pour cette première partie.
 ### Ajout du contenu de adapter-jpa
 Ensuite dans le dossier java je créer le package ```com.example.jpa``` avec la classe Java ```DAOUserJpa```, l'interface ```UserJpaRepository``` et la classe ```UserJpa```.  
 J'ai repris la même structure que pour le Mongo mais j'avais beaucoup d'erreurs que je ne comprennais pas, en relancant le lendemain, plus aucune erreur ne s'affichait.
-## Suite du projet le 17/03
+
+## Suite du projet le 17/03 - JPA
 ### Les articles
 Etant donné que l'énoncé nous parle d'articles, je créer dans ```core-domain``` la même structure que pour User mais cette fois ci pour les articles ```Article.java```, ```ArticleService.java``` et ```IDAOArticle.java```.
 
@@ -169,4 +170,77 @@ La structure de chaque réponse respecte le format imposé par l'énoncé :
     "description": "Contenu de test"
   }
 }
+```  
+### Ajout de adapter-mongo
+
+Création du module `adapter-mongo` sur le même principe que `adapter-jpa` avec trois fichiers dans `com.example.mongo` :
+
+- **`ArticleMongo.java`** : document MongoDB annoté `@Document(collection = "articles")` 
+  avec un `@Id` de type `String`
+- **`ArticleMongoRepository.java`** : interface étendant `MongoRepository<ArticleMongo, String>` 
+  avec `findByTitle()` pour la détection de doublons
+- **`DAOArticleMongo.java`** : implémente `IDAOArticle` avec la même logique de mapping 
+  que `DAOArticleJpa` mais vers MongoDB
+
+#### Fichiers de configuration mis à jour
+
+- **`settings.gradle`** : ajout de `include 'adapter-mongo'`
+- **`app/build.gradle`** : ajout de `implementation project(':adapter-mongo')` et 
+  `implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'`
+- **`AppConfig.java`** : ajout de `@EnableMongoRepositories(basePackages = "com.example.mongo")`
+- **`Application.java`** : ajout de `"com.example.mongo"` dans `scanBasePackages`
+- **`application.yml`** : ajout de la configuration MongoDB :
+```yaml
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/projet_java
 ```
+
+#### Création de la base MongoDB
+On commence par la création de la DB sur MongoDB :  
+<img width="808" height="650" alt="image" src="https://github.com/user-attachments/assets/e6f2b45e-9a1a-4131-8e0b-9a5078ccc422" />
+
+> **Note :** Il n'est pas nécessaire de créer la collection manuellement — 
+> Spring Data MongoDB la crée automatiquement au premier appel.
+
+#### Basculer entre JPA et MongoDB
+
+Pour choisir quelle implémentation utiliser, deux approches sont possibles :
+
+**Option 1 — `@Primary`** *(approche utilisée)*  
+Annoter `@Primary` sur la DAO souhaitée. Spring injectera automatiquement 
+cette implémentation partout où `IDAOArticle` est demandé.
+
+- MongoDB actif → `@Primary` sur `DAOArticleMongo`
+- JPA actif → `@Primary` sur `DAOArticleJpa`
+
+**Option 2 — Injection explicite dans `AppConfig`**  
+Spécifier directement le type concret dans le bean `articleService` :
+```java
+// Pour MongoDB
+@Bean
+public ArticleService articleService(DAOArticleMongo idaoArticle) {
+    return new ArticleService(idaoArticle);
+}
+
+// Pour JPA
+@Bean
+public ArticleService articleService(DAOArticleJpa idaoArticle) {
+    return new ArticleService(idaoArticle);
+}
+```
+
+C'est l'option 2 qui a été retenue car elle est plus explicite et évite 
+les ambiguïtés de résolution de bean par Spring.  
+Voici le résultat :  
+<img width="1081" height="891" alt="image" src="https://github.com/user-attachments/assets/3c50f666-fab2-4e2a-bbea-1395a8a33aaf" />  
+<img width="1068" height="460" alt="image" src="https://github.com/user-attachments/assets/58125061-9b98-413e-af7f-9066f74e5ad3" />  
+
+
+#### Problèmes rencontrés
+
+| Problème | Cause | Solution |
+|---|---|---|
+| Hibernate utilisé à la place de MongoDB malgré `@Primary` | Spring résolvait l'ambiguïté via le nom du paramètre dans `AppConfig` | Remplacer `IDAOArticle` par `DAOArticleMongo` explicitement dans `AppConfig` |
+| `Bean of type 'DAOArticleMongo' could not be found` | `com.example.mongo` absent de `scanBasePackages` | Ajouter `"com.example.mongo"` dans `@SpringBootApplication` |
