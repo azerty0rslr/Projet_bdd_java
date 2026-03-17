@@ -1,0 +1,6 @@
+rootProject.name = 'projet_java'
+
+include 'core-domain'
+include 'adapter-jpa'
+include 'adapter-mongo'
+include 'app'
