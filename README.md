@@ -103,3 +103,70 @@ Une fois l'application démarrée sur `http://localhost:8081`, les endpoints sui
 | `DELETE` | `/articles/{id}` | Supprime un article |
 
 La console H2 est accessible sur `http://localhost:8081/h2-console` avec l'URL JDBC `jdbc:h2:mem:testdb`.
+
+### Adaptation du modèle métier
+
+L'énoncé du TP imposant un modèle précis, j'ai adapté les classes de `core-domain` :
+
+- **`Article.java`** : modification des champs pour correspondre au BO :
+  - `id` passe de `Long` à `String` généré automatiquement en **UUID** via `UUID.randomUUID().toString()` dans le constructeur par défaut
+  - `titre` renommé en `title`
+  - `contenu` renommé en `description`
+
+- **`Response.java`** : classe générique de retour structuré avec trois champs :
+  - `code` : code métier (ex: 2002, 2003, 7001, 7006)
+  - `message` : message lisible décrivant le résultat
+  - `data` : données retournées (peut être `null`)
+
+- **`IDAOArticle.java`** : ajout de deux méthodes nécessaires à la logique métier :
+  - `findByTitle(String title)` : pour détecter les titres en doublon
+  - `existsById(String id)` : pour vérifier l'existence avant suppression ou mise à jour
+
+---
+
+### Logique métier dans ArticleService
+
+`ArticleService` implémente les règles définies dans l'énoncé :
+
+| Méthode | Comportement |
+|---|---|
+| `getAll()` | Retourne toujours `2002` avec la liste |
+| `getById(id)` | `2002` si trouvé, `7001` si inexistant |
+| `delete(id)` | `2002` + `true` si supprimé, `7001` + `false` si inexistant |
+| `save(article)` | `2002` si création, `2003` si mise à jour, `7006` si titre déjà utilisé |
+
+La logique de `save` distingue création et mise à jour en vérifiant si l'`id` existe déjà en base. La détection de doublon de titre exclut l'article lui-même (utile lors d'une mise à jour sans changer le titre).
+
+---
+
+### Adaptation de adapter-jpa
+
+Suite au changement de type de l'`id` (`Long` → `String`) :
+
+- **`ArticleJpa.java`** : l'`id` n'est plus `@GeneratedValue` car la génération UUID se fait dans le domaine
+- **`ArticleJpaRepository.java`** : le type générique passe de `JpaRepository<ArticleJpa, Long>` à `JpaRepository<ArticleJpa, String>`, et ajout de `findByTitle()` — Spring Data génère automatiquement la requête SQL à partir du nom de la méthode
+- **`DAOArticleJpa.java`** : implémentation des deux nouvelles méthodes `findByTitle` et `existsById`
+
+---
+
+### Test final sur Postman
+
+| Méthode | URL | Body | Réponse attendue |
+|---|---|---|---|
+| `GET` | `/articles` | — | `2002` + liste |
+| `GET` | `/articles/{id}` | — | `2002` + article ou `7001` |
+| `POST` | `/articles` | `{"title": "...", "description": "..."}` | `2002` si créé, `2003` si mis à jour, `7006` si titre doublon |
+| `DELETE` | `/articles/{id}` | — | `2002` + `true` ou `7001` + `false` |
+
+La structure de chaque réponse respecte le format imposé par l'énoncé :
+```json
+{
+  "code": 2002,
+  "message": "Article créé avec succès",
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "title": "Mon premier article",
+    "description": "Contenu de test"
+  }
+}
+```
