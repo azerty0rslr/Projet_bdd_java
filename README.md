@@ -65,9 +65,9 @@ projet_java
 
 | Problème | Solution |
 |---|---|
-| `Error resolving plugin` sur `adapter-jpa` | Supprimer tout le bloc `plugins {}` dans `adapter-jpa/build.gradle` |
+| `Error resolving plugin` sur `adapter-jpa` | Supprimer les plugins dans `adapter-jpa/build.gradle` |
 | `No qualifying bean of type 'ArticleJpaRepository'` | Ajouter `@EnableJpaRepositories` et `@EntityScan` dans `AppConfig.java` |
-| `Port 8080 already in use` | Changer le port applicatif à `8081` dans `application.yml` |
+| `Port 8080 already in use` | Changer le port sur 8081 dans `application.yml` |
 
 ---
 
