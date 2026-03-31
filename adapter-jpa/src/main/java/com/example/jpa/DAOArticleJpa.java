@@ -9,9 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-// Implémentation JPA de IDAOArticle
-// Utilise Spring Data JPA pour persister les articles en base H2
-// Rajouter @Primary si on l'utilise
+// Implémente JPA de IDAOArticle
+// Rajouter @Primary si on utilise le JPA et non pas Mongo
 @Repository
 public class DAOArticleJpa implements IDAOArticle {
 
@@ -32,18 +31,21 @@ public class DAOArticleJpa implements IDAOArticle {
 
     @Override
     public Optional<Article> findById(String id) {
+        // On récupère l'article par son ID et on le convertit en Article du domaine
         return repository.findById(id)
                 .map(this::toArticle);
     }
 
     @Override
     public Optional<Article> findByTitle(String title) {
+        // On récupère l'article par son titre et on le convertit en Article du domaine
         return repository.findByTitle(title)
                 .map(this::toArticle);
     }
 
     @Override
     public Article save(Article article) {
+        // On crée l'article avec la méthode POST
         ArticleJpa jpa = toArticleJpa(article);
         ArticleJpa saved = repository.save(jpa);
         return toArticle(saved);
@@ -51,21 +53,24 @@ public class DAOArticleJpa implements IDAOArticle {
 
     @Override
     public boolean deleteById(String id) {
+        // On supprime l'article avec DELETE
         repository.deleteById(id);
         return true;
     }
 
     @Override
     public boolean existsById(String id) {
+        // Pour vérifier si l'id existe
         return repository.existsById(id);
     }
 
-    // Convertit un ArticleJpa (entité persistance) en Article (domaine)
+    // Convertit un ArticleJpa en Article
     private Article toArticle(ArticleJpa jpa) {
+
         return new Article(jpa.getId(), jpa.getTitle(), jpa.getDescription());
     }
 
-    // Convertit un Article (domaine) en ArticleJpa (entité persistance)
+    // Convertit un Article en ArticleJpa
     private ArticleJpa toArticleJpa(Article article) {
         return new ArticleJpa(article.getId(), article.getTitle(), article.getDescription());
     }

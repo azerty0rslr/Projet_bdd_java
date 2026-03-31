@@ -1,12 +1,12 @@
 package com.example.domain;
 
-// Classe générique de retour structuré pour tous les endpoints
-// Respecte le format imposé par le TP : Code | Message | Data
+// Pour afficher les messages de classe métier en respectant le format du TP
 public class Response {
-
-    private int code;       // Code métier (ex: 2002 = succès, 7001 = non trouvé)
-    private String message; // Message lisible décrivant le résultat
-    private Object data;    // Données retournées, peut être null
+    // Code métier
+    private int code;
+    // Message qui décrit le résultat
+    private String message;
+    private Object data;
 
     public Response(int code, String message, Object data) {
         this.code = code;
@@ -14,7 +14,14 @@ public class Response {
         this.data = data;
     }
 
-    public int getCode()        { return code; }
-    public String getMessage()  { return message; }
-    public Object getData()     { return data; }
+    // Affiche le code en retour
+    public int getCode() {
+        return code;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public Object getData() {
+        return data;
+    }
 }

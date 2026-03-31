@@ -1,5 +1,6 @@
 package com.example.app;
 
+// Problème de fonctionnement sans AppConfig, une fois le adapter-mongo créé
 import com.example.domain.ArticleService;
 import com.example.mongo.DAOArticleMongo;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -17,9 +18,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EntityScan(basePackages = "com.example.jpa")
 public class AppConfig {
 
-    // On crée le bean ArticleService manuellement car il est dans core-domain
-    // et ne doit pas avoir d'annotations Spring
-    // On injecte explicitement DAOArticleMongo pour utiliser MongoDB
     // Pour basculer sur JPA, remplacer DAOArticleMongo par DAOArticleJpa
     @Bean
     public ArticleService articleService(DAOArticleMongo idaoArticle) {

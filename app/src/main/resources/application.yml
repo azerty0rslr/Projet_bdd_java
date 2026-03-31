@@ -1,3 +1,5 @@
+## Modification avec Claude du yml pour implémenter le h2 (BDD en intern)
+
 server:
   port: 8081
 
