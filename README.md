@@ -32,10 +32,10 @@ Etant donné que l'énoncé nous parle d'articles, je créer dans ```core-domain
 #### Structure finale du projet
 ```
 projet_java
-├── core-domain     → entités métier et interfaces
-├── adapter-jpa     → implémentation JPA
-├── adapter-mongo   → implémentation Mongo
-└── app             → Spring Boot, controllers REST
+├── core-domain    
+├── adapter-jpa    
+├── adapter-mongo  
+└── app       
 ```
 
 #### Règles d'architecture respectées
