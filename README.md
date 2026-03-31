@@ -22,23 +22,20 @@ De plus j'ai décommenté ```implementation project(':adapter-jpa')``` du ```bui
 Ainsi que ```include 'adapter-jpa'``` du ```settings.gradle``` du projet.  
 Pas de difficulté pour cette première partie.  
 ### Ajout du contenu de adapter-jpa
-Ensuite dans le dossier java je créer le package ```com.example.jpa``` avec la classe Java ```DAOUserJpa```, l'interface ```UserJpaRepository``` et la classe ```UserJpa```.  
+Ensuite dans le dossier java je créer le package ```com.example.jpa``` avec la classe Java ```DAOArticleJpa```, l'interface ```ArticleJpaRepository``` et la classe ```ArticleJpa```.  
 J'ai repris la même structure que pour le Mongo mais j'avais beaucoup d'erreurs que je ne comprennais pas, en relancant le lendemain, plus aucune erreur ne s'affichait.
 
 ## Suite du projet le 17/03 - JPA
 ### Les articles
 Etant donné que l'énoncé nous parle d'articles, je créer dans ```core-domain``` la même structure que pour User mais cette fois ci pour les articles ```Article.java```, ```ArticleService.java``` et ```IDAOArticle.java```.
 
-### Mise en place de l'architecture DDD multi-modules
-
-L'objectif est de structurer le projet en respectant les principes du **Domain-Driven Design (DDD)** avec une séparation stricte des responsabilités entre les modules.
-
 #### Structure finale du projet
 ```
 projet_java
-├── core-domain     → entités métier et interfaces (aucune dépendance externe)
-├── adapter-jpa     → implémentation JPA des interfaces du domaine
-└── app             → point d'entrée Spring Boot, controllers REST
+├── core-domain     → entités métier et interfaces
+├── adapter-jpa     → implémentation JPA
+├── adapter-mongo   → implémentation Mongo
+└── app             → Spring Boot, controllers REST
 ```
 
 #### Règles d'architecture respectées
