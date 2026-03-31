@@ -21,6 +21,7 @@ dependencies {
 De plus j'ai décommenté ```implementation project(':adapter-jpa')``` du ```build.gradle``` de app.  
 Ainsi que ```include 'adapter-jpa'``` du ```settings.gradle``` du projet.  
 Pas de difficulté pour cette première partie.  
+
 ### Ajout du contenu de adapter-jpa
 Ensuite dans le dossier java je créer le package ```com.example.jpa``` avec la classe Java ```DAOArticleJpa```, l'interface ```ArticleJpaRepository``` et la classe ```ArticleJpa```.  
 J'ai repris la même structure que pour le Mongo mais j'avais beaucoup d'erreurs que je ne comprennais pas, en relancant le lendemain, plus aucune erreur ne s'affichait.
@@ -38,40 +39,27 @@ projet_java
 └── app       
 ```
 
-#### Règles d'architecture respectées
-- `core-domain` ne dépend d'aucun adapter ni d'aucun framework
-- `adapter-jpa` dépend uniquement de `core-domain`
-- `app` assemble tout et dépend de `core-domain` et `adapter-jpa`
-
----
 
 ### Contenu de core-domain
 
-Trois classes constituant le cœur métier, sans aucune annotation Spring ou JPA :
+- **`Article.java`** : classe article avec les champs `id`, `titre` et `contenu`
+- **`IDAOArticle.java`** : interface qui défini les opérations (`findAll`, `findById`, `save`, `deleteById`)
+- **`ArticleService.java`** : service qui utilise `IDAOArticle`
 
-- **`Article.java`** : classe métier avec les champs `id`, `titre` et `contenu`
-- **`IDAOArticle.java`** : interface définissant les opérations CRUD (`findAll`, `findById`, `save`, `deleteById`)
-- **`ArticleService.java`** : service métier qui utilise `IDAOArticle` via **injection par constructeur**, sans annotation Spring — Spring ne doit pas polluer le domaine
-
----
 
 ### Contenu de adapter-jpa
 
-Implémentation de la persistance via Spring Data JPA :
+- **`ArticleJpa.java`** : entité JPA avec la table `articles` en base (h2)
+- **`DAOArticleJpa.java`** : implémente `IDAOArticle` et le lie à `ArticleJpa`
 
-- **`ArticleJpa.java`** : entité JPA annotée `@Entity`,映射 la table `articles` en base
-- **`ArticleJpaRepository.java`** : interface étendant `JpaRepository<ArticleJpa, Long>`, gérée automatiquement par Spring Data
-- **`DAOArticleJpa.java`** : classe annotée `@Repository` qui implémente `IDAOArticle` et fait le mapping entre `Article` (domaine) et `ArticleJpa` (persistance)
-
----
 
 ### Contenu de app
 
-- **`Application.java`** : point d'entrée Spring Boot avec `@SpringBootApplication` et `scanBasePackages` couvrant `com.example.app` et `com.example.jpa`
-- **`AppConfig.java`** : configuration Spring déclarant le bean `ArticleService` manuellement, avec `@EnableJpaRepositories` et `@EntityScan` pointant vers `com.example.jpa` pour que Spring détecte les repositories et entités du module `adapter-jpa`
-- **`ArticleController.java`** : controller REST exposant les endpoints CRUD sur `/articles`
+- **`Application.java`** : couvre `com.example.app` et `com.example.jpa` et `com.example.mongo`
+- **`AppConfig.java`** : déclaration du bean `ArticleService` manuellement pointant vers `com.example.jpa` sinon ne marche pas
+- **`ArticleController.java`** : exposition des opérations (`findAll`, `findById`, `save`, `deleteById`) sur `/articles`
 
----
+///////////////////// RENDUE LA
 
 ### Problèmes rencontrés et solutions
 
