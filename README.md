@@ -63,11 +63,11 @@ projet_java
 
 ### Problèmes rencontrés et solutions
 
-| Problème | Cause | Solution |
-|---|---|---|
-| `Error resolving plugin` sur `adapter-jpa` | Le plugin `org.springframework.boot` était redéclaré avec une version différente de celle de la racine | Supprimer tout le bloc `plugins {}` dans `adapter-jpa/build.gradle` |
-| `No qualifying bean of type 'ArticleJpaRepository'` | Spring ne scannait pas le package `com.example.jpa` du module `adapter-jpa` | Ajouter `@EnableJpaRepositories` et `@EntityScan` dans `AppConfig.java` |
-| `Port 8080 already in use` | Le service `PEMHTTPD-x64` (Parallels Endpoint Manager) occupait déjà le port 8080 | Changer le port applicatif à `8081` dans `application.yml` |
+| Problème | Solution |
+|---|---|
+| `Error resolving plugin` sur `adapter-jpa` | Supprimer tout le bloc `plugins {}` dans `adapter-jpa/build.gradle` |
+| `No qualifying bean of type 'ArticleJpaRepository'` | Ajouter `@EnableJpaRepositories` et `@EntityScan` dans `AppConfig.java` |
+| `Port 8080 already in use` | Changer le port applicatif à `8081` dans `application.yml` |
 
 ---
 
