@@ -148,7 +148,7 @@ Voici le résultat :
 <img width="1068" height="460" alt="image" src="https://github.com/user-attachments/assets/58125061-9b98-413e-af7f-9066f74e5ad3" />  
 
 
-#### Problèmes rencontrés
+#### Problèmes
 
 | Problème | Solution |
 |---|---|
