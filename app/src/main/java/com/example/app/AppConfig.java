@@ -10,15 +10,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @Configuration
-// Indique à Spring où chercher les repositories JPA
+// Problème de No qualifying bean of type 'ArticleJpaRepository', obligé de le rajouter pour que fonctionne
 @EnableJpaRepositories(basePackages = "com.example.jpa")
-// Indique à Spring où chercher les repositories MongoDB
+// Problème de No qualifying bean of type 'ArticleJpaRepository', obligé de le rajouter pour que fonctionne
 @EnableMongoRepositories(basePackages = "com.example.mongo")
-// Indique à Hibernate où chercher les entités @Entity
+// Problème de No qualifying bean of type 'ArticleJpaRepository', obligé de le rajouter pour que fonctionne
 @EntityScan(basePackages = "com.example.jpa")
 public class AppConfig {
 
-    // Pour basculer sur JPA, remplacer DAOArticleMongo par DAOArticleJpa
+    // Pour passer sur JPA remplacer DAOArticleMongo par DAOArticleJpa
     @Bean
     public ArticleService articleService(DAOArticleMongo idaoArticle) {
         return new ArticleService(idaoArticle);
